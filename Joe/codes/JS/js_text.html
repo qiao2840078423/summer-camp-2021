@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript</title>
+
+    <script>
+        function myFunction(){
+            var x = 10;
+            var y = 20;
+            var alist = [1,2,3];
+            var name = "Joe Bryant"
+            var result = x*y;
+            document.getElementById("click").innerHTML = name;
+            return result;
+        }
+
+        function myFunction2(){
+            var get = myFunction();
+            document.getElementById("get").innerHTML = get;
+        }
+        
+
+    </script>
+
+    <style>
+        #click {
+            color: pink;
+        }
+    </style>
+</head>
+<body>
+    <p id="click">
+        当你点击时，我将会变化!
+    </p>
+    <button type="button" onclick="myFunction()">click here!</button>
+    <p id="get">我不会变</p>
+    <script>
+        myFunction2();
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JSON格式案例(w3cschool.cn)</title>
+</head>
+<body>
+
+<h2>为 JSON 字符串创建对象</h2>
+<p id="demo"></p>
+<script>
+var text = '{"employees":[' +
+	'{"firstName":"John","lastName":"Doe" },' +
+	'{"firstName":"Anna","lastName":"Smith" },' +
+	'{"firstName":"Peter","lastName":"Jones" }]}';
+obj = JSON.parse(text);
+document.getElementById("demo").innerHTML =
+	obj.employees[1].firstName + " " + obj.employees[1].lastName;
+</script>
+
+<!-- 也可用eval()函数，eval() 函数使用的是 JavaScript 编译器，可解析 JSON 文本，
+    然后生成 JavaScript 对象。必须把文本包围在括号中，这样才能避免语法错误 -->
+
+</body>
+</html>
