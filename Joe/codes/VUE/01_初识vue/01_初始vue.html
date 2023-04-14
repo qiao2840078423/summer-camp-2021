@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>初识Vue</title>
+    <script type="text/javascript" src="../JS/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <h1>插值语法</h1>
+        <h3>Hello, {{name}}!</h3>
+        <hr>
+        <h1>指令语法</h1>
+        <a v-bind:href="url">点击进入NBA官网</a>
+        <a :href="url">点击进入NBA官网</a>
+        <hr>
+        单向数据绑定：<input type="text" v-bind:value="value">
+        双向数据绑定：<input type="text" v-model:value="value">
+    </div>
+
+    <script>
+        // 创建Vue实例，与容器一对一
+        const vm = new Vue({
+            // el:'#root', // el用于指定当前Vue实例为哪个容器服务，值通常为css选择器字符串
+            // data的第一种写法
+            // data:{
+            //     // data中存取数据，供el指定的容器使用
+            //     name:'Joe',
+            //     url:"https://www.nba.com/search",
+            //     value:'change'
+            // }
+            // data的第二种写法
+            data:function(){
+                console.log(this);
+                return {
+                    name:'Joe',
+                    url:"https://www.nba.com/search",
+                    value:'change'
+                }
+            }
+        })
+        console.log(vm);
+        setTimeout(()=>{
+            vm.$mount('#root')
+        },1000)
+    </script>
+</body>
+</html>
