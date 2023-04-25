@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天气案例_监视属性</title>
+    <script src="../JS/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <h2>今天天气很{{info}}</h2>
+        <button @click="changeWeather">切换天气</button>
+        <h2>a={{numbers.a}}</h2>
+        <button @click="numbers.a++">点我a加一</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#root",
+            data: {
+                isHot: true,
+                numbers: {
+                    a: 1,
+                    b: 2
+                }
+            },
+            computed: {
+                info() {
+                    return this.isHot ? "炎热" : "凉爽"
+                }
+            },
+            methods: {
+                changeWeather() {
+                    if (this.isHot) {
+                        this.isHot = false
+                    }
+                    else {
+                        this.isHot = true
+                    }
+                }
+            },
+            watch: {
+                isHot: {
+                    // isHot改变时调用
+                    handler(newValue, oldValue) {
+                        console.log("被修改", newValue, oldValue);
+                    },
+                    immediate: true
+                },
+                // 'numbers.a': {
+                //     handler(){
+                //         console.log("加一！");
+                //     }
+                // }
+                numbers: {
+                    deep: true,
+                    handler() {
+                        console.log("numbers被修改!");
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

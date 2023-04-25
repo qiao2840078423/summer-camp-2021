@@ -358,23 +358,23 @@
 
 - ES6 规定，`Promise`对象是一个构造函数，用来生成`Promise`实例
 
-![image-20230412213550786](E:\Github\summer-camp-2021\Joe\notes\images\image-20230412213550786.png)
+![image-20230412213550786](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230412213550786.png)
 
 - `Promise`构造函数接受一个函数作为参数，该函数的两个参数分别是`resolve`和`reject`。它们是两个函数，由 JavaScript 引擎提供，不用自己部署。
 - `resolve`函数的作用是，将`Promise`对象的状态从“未完成”变为“成功”（即从 pending 变为 resolved），在异步操作成功时调用，并将异步操作的结果，作为参数传递出去；`reject`函数的作用是，将`Promise`对象的状态从“未完成”变为“失败”（即从 pending 变为 rejected），在异步操作失败时调用，并将异步操作报出的错误，作为参数传递出去
 - `Promise`实例生成以后，可以用`then`方法分别指定`resolved`状态和`rejected`状态的回调函数
 
-![image-20230412213639624](E:\Github\summer-camp-2021\Joe\notes\images\image-20230412213639624.png)
+![image-20230412213639624](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230412213639624.png)
 
 - `then`方法可以接受两个回调函数作为参数。第一个回调函数是`Promise`对象的状态变为`resolved`时调用，第二个回调函数是`Promise`对象的状态变为`rejected`时调用。其中，第二个函数是可选的，不一定要提供。这两个函数都接受`Promise`对象传出的值作为参数
 - Promise 新建后就会立即执行
 
-![image-20230412213750236](E:\Github\summer-camp-2021\Joe\notes\images\image-20230412213750236.png)
+![image-20230412213750236](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230412213750236.png)
 
 - 上面代码中，Promise 新建后立即执行，所以首先输出的是`Promise`。然后，`then`方法指定的回调函数，将在当前脚本所有同步任务执行完才会执行，所以`resolved`最后输出
 - 注意，调用`resolve`或`reject`并不会终结 Promise 的参数函数的执行
 
-![image-20230412213839470](E:\Github\summer-camp-2021\Joe\notes\images\image-20230412213839470.png)
+![image-20230412213839470](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230412213839470.png)
 
 - 上面代码中，调用`resolve(1)`以后，后面的`console.log(2)`还是会执行，并且会首先打印出来。这是因为立即 resolved 的 Promise 是在本轮事件循环的末尾执行，总是晚于本轮循环的同步任务
 - 一般来说，调用`resolve`或`reject`以后，Promise 的使命就完成了，后继操作应该放到`then`方法里面，而不应该直接写在`resolve`或`reject`的后面。所以，最好在它们前面加上`return`语句，这样就不会有意外
