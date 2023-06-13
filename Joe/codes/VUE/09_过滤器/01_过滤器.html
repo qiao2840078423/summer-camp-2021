@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>过滤器</title>
+    <script src="../JS/dayjs.min.js"></script>
+    <script src="../JS/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <h2>当前时间为：{{time}}</h2>
+        <h2>计算属性后：{{fmtTime}}</h2>
+        <h2>methods: {{getFmtTime()}}</h2>
+        <!-- 过滤器实现 -->
+        <h2>过滤器：{{time | timeFormater}}</h2>
+    </div>
+
+    <script>
+        vm = new Vue({
+            el: "#root",
+            data: {
+                time: 1684222223799
+            },
+            computed: {
+                fmtTime(){
+                    return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            methods: {
+                getFmtTime(){
+                    return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                }   
+            },
+            filters: {
+                timeFormater:function(value){
+                    return dayjs(value).format('YYYY-MM-DD HH:mm:ss')
+                }
+            }
+        })
+    </script>
+</body>
+</html>

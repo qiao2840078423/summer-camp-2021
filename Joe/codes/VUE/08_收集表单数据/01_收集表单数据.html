@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收集表单数据</title>
+    <script src="../JS/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <form @submit.prevent="submit">
+            账号：<input type="text" v-model.trim="userinfo.account"> <br><br>
+            密码：<input type="password" v-model="userinfo.password"> <br><br>
+            年龄：<input type="number" v-model.number="userinfo.age"> <br><br>
+            性别：
+            男<input type="radio" name="sex" v-model="userinfo.sex" value="male">
+            女<input type="radio" name="sex" v-model="userinfo.sex" value="female"><br><br>
+            爱好：
+            学习<input type="checkbox" v-model="userinfo.hobby" value="study">
+            吃饭<input type="checkbox" v-model="userinfo.hobby" value="eat">
+            睡觉<input type="checkbox" v-model="userinfo.hobby" value="play"> <br><br>
+            所属校区
+            <select v-model="userinfo.city">
+                <option value="">请选择校区</option>
+                <option value="beijing">北京</option>
+                <option value="shanghai">上海</option>
+                <option value="shenzhen">深圳</option>
+                <option value="wuhan">武汉</option>
+            </select>
+            <br><br>
+            其他信息：
+            <textarea v-model.lazy="userinfo.otherinfo"></textarea> <br><br>
+            <input type="checkbox" v-model="userinfo.agree">阅读并接受<a href="http://www.baidu.com">《百度协议》</a>
+            <button v-if="userinfo.agree">提交</button>
+        </form>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                userinfo: {
+                    account: '',
+                    password: '',
+                    age: 18,
+                    sex: '',
+                    hobby: [],
+                    city: '',
+                    otherinfo: '',
+                    agree: false
+                }
+            },
+            methods: {
+                submit() {
+                    console.log(JSON.stringify(this.userinfo));
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

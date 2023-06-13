@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内置指令</title>
+    <script src="../JS/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <h2 v-text="name"></h2>
+        <h2 v-html="str"></h2>
+        <h2 v-cloak>{{school}}</h2>
+        <h2 v-once>{{n}}</h2>
+        <h2 v-pre>第一个是初始值，第二个是动态值</h2>
+        <h2>{{n}}</h2>
+        <button @click="add">n++</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#root",
+            data: {
+                name: "Joe",
+                str: "<h3>Kobe</h3>",
+                school: "HUST",
+                n: 1
+            },
+            methods: {
+                add(){
+                    this.n ++
+                }
+            }
+        })
+    </script>
+</body>
+</html>
