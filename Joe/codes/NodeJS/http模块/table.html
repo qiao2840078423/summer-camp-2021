@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <style>
+        td {
+            padding: 20px 40px;
+        }
+
+        table,
+        td {
+            border-collapse: collapse;
+        }
+
+        table tr:nth-child(odd) {
+            background: #fcb;
+        }
+
+        table tr:nth-child(even) {
+            background: #aef;
+        }
+    </style>
+</head>
+
+<body>
+    <table border="1">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</body>
+
+<script>
+    const table = document.querySelector("table")
+    table.addEventListener('click', (e) => {
+        // console.log(e);
+        if (e.target.nodeName === 'TD') {
+            e.target.style.background = '#222'
+        }
+    })
+</script>
+
+</html>

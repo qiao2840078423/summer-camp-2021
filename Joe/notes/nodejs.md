@@ -176,4 +176,135 @@ fs.stat(__dirname + '/images', (err, data) => {
 
 ## http模块
 
+[Node.js Http模块](https://juejin.cn/post/6983238709097267236)
+
 [http请求头、响应状态码等](https://developer.mozilla.org/zh-CN/docs/Web/HTTP)
+
+### 1-创建http服务
+
+```javascript
+// 1. 导入http模块
+const http = require('http');
+
+// 2. 创建服务对象
+server = http.createServer((request, response) => {
+    response.setHeader('content-type', 'text/html;charset=utf-8')
+    response.end("Hello HTTP Server! 你好") // 设置响应体
+})
+
+// 3. 监听端口，开启服务
+server.listen(9000, () => {
+    console.log("服务启动...");
+})
+```
+
+### 2-提取http报文
+
+```javascript
+// 1. 导入http模块
+const http = require('http');
+
+// 导入url模块
+const url = require('url')
+
+// 2. 创建服务对象
+server = http.createServer((request, response) => {
+    response.setHeader('content-type', 'text/html;charset=utf-8')
+
+    // 获取请求方法
+    let method = request.method;
+
+    // 获取请求url
+    let myUrl = request.url;
+    // 解析url
+    res = url.parse(request.url, true); // true参数使query字段对应对象
+    // 路径
+    pathname = res.pathname
+    // 查询字符串
+    let keyword = res.query.key
+
+    // 获取http协议的版本号
+    let version = request.httpVersion;
+
+    // 获取http的请求头
+    let header = request.headers;
+
+    // 获取http的请求体
+    let body = ''
+    request.on("data", chunk => {
+        body += chunk
+    })
+    request.on("end", () => {
+        console.log(body);
+    })
+
+    response.end("Hello HTTP Server! 你好") // 设置响应体
+})
+
+// 3. 监听端口，开启服务
+server.listen(9000, () => {
+    console.log("服务启动...");
+})
+```
+
+### 3-设置http响应报文
+
+```javascript
+const http = require('http')
+
+const server = http.createServer((request, response) => {
+    // 1. 设置响应状态码
+    response.statusCode = 203
+
+    // 2. 设置响应状态的描述
+    response.statusMessage = 'love'
+
+    // 3. 响应头
+    response.setHeader('content-type', 'text/html;charset=utf-8')
+
+    // 4. 响应体
+    response.write('i ')
+    response.write('love ')
+    response.write('you')
+    response.end()
+})
+
+server.listen('9000', () => {
+    console.log('启动服务完成...');
+})
+```
+
+### 4-搭建静态资源服务
+
+```javascript
+const http = require('http')
+
+const fs = require('fs')
+
+const server = http.createServer((request, response) => {
+
+    // response.setHeader('content-type', 'text/html;charset=utf-8')
+
+    let { pathname } = new URL(request.url, 'http://127.0.0.1')
+    // 网站根目录
+    let root = __dirname + '/pages'
+    // 拼接文件路径
+    let filePath = root + pathname
+    // 读取文件
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            response.end('文件读取失败')
+            return;
+        }
+        // 响应文件内容
+        response.end(data)
+    })
+})
+
+server.listen('9000', () => {
+    console.log('启动服务完成...');
+})
+```
+
+- html文字格式由meta标签确定，setHeader的优先级更高
+- css和js文件格式可以不直接设置响应头，若不设置就按照html的文字格式响应。最然在chrome开发者工具里的预览中会乱码，但在控制台打印的时候字体不会乱码
