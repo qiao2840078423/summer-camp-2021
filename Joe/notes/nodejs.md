@@ -308,3 +308,38 @@ server.listen('9000', () => {
 
 - html文字格式由meta标签确定，setHeader的优先级更高
 - css和js文件格式可以不直接设置响应头，若不设置就按照html的文字格式响应。最然在chrome开发者工具里的预览中会乱码，但在控制台打印的时候字体不会乱码
+
+
+
+## 模块化
+
+### 1-暴露数据
+
+```javascript
+function eat() {
+    console.log('吃饭');
+}
+
+function sleep() {
+    console.log('睡觉');
+}
+
+// 暴露数据
+// 方式一
+module.exports = {
+    eat,
+    sleep
+}
+
+// 方式二
+// exports.eat = eat
+// exports.sleep = sleep
+```
+
+### 2-导入模块
+
+```javascript
+const me = require('./me.js')
+me.eat()
+me.sleep()
+```
