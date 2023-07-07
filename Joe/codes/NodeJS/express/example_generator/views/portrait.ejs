@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传</title>
+</head>
+<body>
+    <h2>文件上传</h2>
+    <hr>
+    <!-- 文件上传的必需属性设置 enctype -->
+    <form action="http://127.0.0.1:3000/portrait" method="post" enctype="multipart/form-data">
+        用户名：<input type="text" name="username"><br>
+        头像：<input type="file" name="portrait"><br>
+        <hr>
+        <button>提交</button>
+    </form>
+</body>
+</html>

@@ -343,3 +343,259 @@ const me = require('./me.js')
 me.eat()
 me.sleep()
 ```
+
+
+
+## 包管理工具
+
+https://www.npmjs.com/
+
+[30 个有用的 Node.js NPM 包](https://juejin.cn/post/7002054481252728869)
+
+### 1-npm初始化包
+
+```
+npm init
+```
+
+​	生成package.json配置文件
+
+### 2-npm下载安装包
+
+```
+npm install xxx
+```
+
+### 3-require导入npm包的基本流程
+
+1. 在当前文件夹下的node_modules中寻找同名的文件夹
+2. 在上级目录中下的node_modules中寻找同名的文件夹，直至找到磁盘根目录
+
+### 4-生产依赖和开发依赖
+
+- 生产依赖（默认选项）（开发和生产阶段都会被使用）
+
+  - ```javascript
+    npm i -S xxx
+    npm i --save xxx
+    ```
+
+- 开发依赖（仅在开发阶段使用）
+
+  - ```javascript
+    npm i -D less
+    npm i --save-dev less
+    ```
+
+    
+
+## express框架
+
+### 1-基本使用-框架流程、获得请求参数、响应设置
+
+```javascript
+// 导入express
+const express = require('express')
+
+// 创建应用对象
+const app = express()
+
+// 创建路由
+app.get('/home', (req, res) => {
+    res.end("Hello express!")
+
+    // 获取请求报文参数
+    // 请求路径
+    let path = req.path
+    // 查询字符串
+    let query = req.query
+    // ip
+    let ip = req.ip
+    // 请求头
+    let host = req.get('host')
+
+    // test
+    // console.log(path);
+    // console.log(query);
+    // console.log(ip);
+    // console.log(host);
+})
+
+app.get('/', (req, res) => {
+    res.end('home')
+})
+
+app.post('/login', (req, res) => {
+    res.end('login')
+})
+
+app.all('/all', (req, res) => {
+    res.end('all')
+})
+
+app.get('/:id.html', (req, res) => {
+    // 获取路由参数
+    let id = req.params.id
+    // console.log(id);
+    res.end('goods')
+})
+
+// 响应设置
+app.get('/response', (req, res) => {
+    // 可链式调用
+    res.status(200)
+    res.set("key", "value")
+    res.send("response 可以链式调用")
+
+    // 重定向
+    // res.redirect('http://bing.com')
+
+    // 下载响应
+    // res.download(__dirname + '/package.json')
+
+    // JSON响应
+    // res.json({
+    //     name: 'Joe',
+    //     age: 20
+    // })
+
+    // 响应文件内容
+    // res.sendFile(__dirname + '/package.json')
+})
+
+app.all('*', (req, res) => {
+    res.end('404 Not Found')
+})
+
+// 监听端口
+app.listen(3000, () => {
+    console.log('服务已启动...');
+})
+```
+
+### 2-中间件
+
+```javascript
+const express = require('express')
+const fs = require('fs')
+const path = require('path')
+
+
+const app = express()
+
+// 声明全局中间件函数
+function recordMiddleWare(req, res, next) {
+    let { url, ip } = req
+    fs.appendFileSync(path.resolve(__dirname, './access.log'), `${url} ${ip}\r\n`)
+    next()
+}
+
+// 声明路由中间件函数
+let checkCodeMiddleWare = (req, res, next) => {
+    if (req.query.code === '520') {
+        next()
+    }
+    else {
+        res.send('暗号错误')
+    }
+}
+
+app.use(recordMiddleWare)
+
+app.get('/home', checkCodeMiddleWare, (req, res) => {
+    res.send('前台页面')
+})
+
+app.get('/admin', checkCodeMiddleWare, (req, res) => {
+    res.send('后台页面')
+})
+
+app.listen(3000, () => {
+    console.log('服务已启动...');
+})
+```
+
+### 3-静态资源中间件
+
+```javascript
+const express = require('express')
+
+const app = express()
+
+app.use(express.static(__dirname + '/public'))
+
+app.get('/home', (req, res) => {
+    res.send('前台页面')
+})
+
+app.listen(3000, () => {
+    console.log('服务已启动...');
+})
+```
+
+### 4-获取请求体
+
+```javascript
+const express = require('express')
+const bodyParser = require('body-parser')
+
+const app = express()
+
+// 解析JSON格式的请求体的中间件
+const jsonParser = bodyParser.json()
+
+// 请求querystring格式的请求体的中间件
+const urlencodeParser = bodyParser.urlencoded({ extended: false })
+
+app.post('/home', urlencodeParser, (req, res) => {
+    // 当添加中间件后，会自动在req对象上添加body属性
+    console.log(req.body);
+    res.send('前台页面')
+})
+
+app.listen(3000, () => {
+    console.log('服务已启动...');
+})
+```
+
+### 5-路由模块化
+
+```javascript
+const express = require('express')
+const router = require('./routers/router')
+
+// 创建应用对象
+const app = express()
+
+app.use(router)
+
+app.listen(3000, () => {
+    console.log('服务已启动...');
+})
+```
+
+`router.js`
+
+```javascript
+const express = require('express')
+
+const router = express.Router()
+
+router.post('/login', (req, res) => {
+    res.end('login')
+})
+
+router.get('/home', (req, res) => {
+    res.end("Hello express!")
+})
+
+module.exports = router
+```
+
+### 6-express-generator工具
+
+1. 首先下载全局包express-generator：`npm install -g express-generator`
+
+2. 下载之后，会暴露出`express`命令，使用`express -e xxx` 快速生成express骨架，其中-e表示支持ejs模板引擎，xxx为文件夹名
+
+3. 在文件夹路径下，`npm install` 下载 `node_modules` 文件夹
