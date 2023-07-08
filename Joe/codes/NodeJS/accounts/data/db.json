@@ -1,0 +1,28 @@
+{
+  "accounts": [
+    {
+      "id": "Foy4yW7aR",
+      "title": "喝水",
+      "time": "2023-07-06",
+      "type": "-1",
+      "account": "6",
+      "remarks": "喝了两瓶水"
+    },
+    {
+      "id": "5Txj8tyGf",
+      "title": "上班",
+      "time": "2023-07-10",
+      "type": "1",
+      "account": "150",
+      "remarks": "赚钱"
+    },
+    {
+      "id": "60N0nTUQV",
+      "title": "吃饭",
+      "time": "2023-07-08",
+      "type": "-1",
+      "account": "12",
+      "remarks": "鸡蛋"
+    }
+  ]
+}
