@@ -1024,3 +1024,11 @@ function TextInputWithFocusButton() {
 ## 18. React性能优化
 
 https://blog.csdn.net/zhangrui_web/article/details/112979204
+
+
+
+## 19. Redux
+
+https://cn.redux.js.org/
+
+Redux 是 JavaScript 应用的状态容器，提供可预测的状态管理。
