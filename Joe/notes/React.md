@@ -994,3 +994,33 @@ function TextInputWithFocusButton() {
 ```
 
 请记住，当 ref 对象内容发生变化时，`useRef` 并*不会*通知你。变更 `.current` 属性不会引发组件重新渲染。如果想要在 React 绑定或解绑 DOM 节点的 ref 时运行某些代码，则需要使用[回调 ref](https://zh-hans.legacy.reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node) 来实现。
+
+
+
+## 17. React路由
+
+### SPA的理解
+
+1. 单页面web应用
+2. 不会刷新页面，只做页面的局部更新
+3. 数据通过ajax异步获取，并在前端异步实现
+
+### 路由的基本使用
+
+尚硅谷教程p128
+
+#### \<Routers\>
+
+![image-20230723122707557](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230723122707557.png)
+
+#### NavLink高亮
+
+自定义类名：
+
+![image-20230723123352099](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230723123352099.png)
+
+
+
+## 18. React性能优化
+
+https://blog.csdn.net/zhangrui_web/article/details/112979204
