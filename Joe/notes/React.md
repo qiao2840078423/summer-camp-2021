@@ -1031,4 +1031,109 @@ https://blog.csdn.net/zhangrui_web/article/details/112979204
 
 https://cn.redux.js.org/
 
+**强烈推荐[第三节：数据流基础](https://cn.redux.js.org/tutorials/essentials/part-3-data-flow)**和[**第四节：使用数据**](https://cn.redux.js.org/tutorials/essentials/part-4-using-data/)和**[第五节：异步逻辑与数据请求](https://cn.redux.js.org/tutorials/essentials/part-5-async-logic/)**
+
 Redux 是 JavaScript 应用的状态容器，提供可预测的状态管理。
+
+应用中使用集中式的全局状态来管理，并明确更新状态的模式，以便让代码具有可预测性
+
+- 初始启动：
+  - 使用最顶层的 root reducer 函数创建 Redux store
+  - store 调用一次 root reducer，并将返回值保存为它的初始 `state`
+  - 当视图 首次渲染时，视图组件访问 Redux store 的当前 state，并使用该数据来决定要呈现的内容。同时监听 store 的更新，以便他们可以知道 state 是否已更改。
+- 更新环节：
+  - 应用程序中发生了某些事情，例如用户单击按钮
+  - dispatch 一个 action 到 Redux store，例如 `dispatch({type: 'counter/increment'})`
+  - store 用之前的 `state` 和当前的 `action` 再次运行 reducer 函数，并将返回值保存为新的 `state`
+  - store 通知所有订阅过的视图，通知它们 store 发生更新
+  - 每个订阅过 store 数据的视图 组件都会检查它们需要的 state 部分是否被更新。
+  - 发现数据被更新的每个组件都强制使用新数据重新渲染，紧接着更新网页
+
+在 Redux 中，**永远 不允许在 reducer 中更改 state 的原始对象！**
+
+#### 用 Thunk 编写异步逻辑
+
+**thunk** 是一种特定类型的 Redux 函数，可以包含异步逻辑。Thunk 是使用两个函数编写的：
+
+- 一个内部 thunk 函数，它以 `dispatch` 和 `getState` 作为参数
+- 外部创建者函数，它创建并返回 thunk 函数
+
+```tsx
+// 下面这个函数就是一个 thunk ，它使我们可以执行异步逻辑
+// 你可以 dispatched 异步 action `dispatch(incrementAsync(10))` 就像一个常规的 action
+// 调用 thunk 时接受 `dispatch` 函数作为第一个参数
+// 当异步代码执行完毕时，可以 dispatched actions
+export const incrementAsync = amount => dispatch => {
+  setTimeout(() => {
+    dispatch(incrementByAmount(amount))
+  }, 1000)
+}
+```
+
+我们可以像使用普通 Redux action creator 一样使用它们：
+
+```tsx
+store.dispatch(incrementAsync(5))
+```
+
+当你需要进行 AJAX 调用以从服务器获取数据时，你可以将该调用放入 thunk 中。这是一个写得有点长的例子，所以你可以看到它是如何定义的：
+
+```tsx
+// 外部的 thunk creator 函数
+const fetchUserById = userId => {
+  // 内部的 thunk 函数
+  return async (dispatch, getState) => {
+    try {
+      // thunk 内发起异步数据请求
+      const user = await userAPI.fetchById(userId)
+      // 但数据响应完成后 dispatch 一个 action
+      dispatch(userLoaded(user))
+    } catch (err) {
+      // 如果过程出错，在这里处理
+    }
+  }
+}
+```
+
+每当一个 action 被 dispatch 并且 Redux store 被更新时，`useSelector` 将重新运行我们的选择器函数。如果选择器返回的值与上次不同，`useSelector` 将确保我们的组件使用新值重新渲染。
+
+**在 React + Redux 应用中，你的全局状态应该放在 Redux store 中，你的本地状态应该保留在 React 组件中。**
+
+ **大多数表单的 state 不应该保存在 Redux 中**，相反，在编辑表单的时候把数据存到表单组件中，当用户提交表单的时候再 dispatch action 来更新 store。
+
+![image-20230726115613268](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230726115613268.png)
+
+重要的是要注意**每当 `useSelector` 返回的值为新引用时，组件就会重新渲染**。所以组件应始终尝试从 store 中选择它们需要的**尽可能少**的数据，这将有助于确保它仅在实际需要时才渲染。
+
+### 总结
+
+- **任意 React 组件都能从 Redux store 中拿到其需要的数据**
+  - 任意组件都能从 Redux Store 中读取任意数据
+  - 多个组件可以读取相同的数据，甚至在同一时刻读
+  - 组件应该根据其渲染所需，从 Redux Store 中读取最小量的数据
+  - 组件可以结合 props, state, Redux store 的数据去渲染。组件可以从 store 中读取多条数据，并根据需要重塑数据以进行显示。
+  - 任意组件都能通过 dispatch actions 引发状态更新（state updates）
+
+- **Redux action creators 可以使用一个正确的内容模板去构造（prepare）action 对象**
+  - `createSlice` 和 `createAction` 可以接受一个返回 action payload 的 "prepare callback"
+  - 诸如唯一的 ID 和一些随机值应该放在 action 里，而不是在 reducer 中去计算
+- **Reducers 内（仅）应该包含 state 的更新逻辑**
+  - Reducers 内可以包含计算新 state 所需的任意逻辑
+  - Action 对象内应该包含足够描述即将发生什么事的信息
+
+
+
+- **可以编写可复用的“selector 选择器”函数来封装从 Redux 状态中读取数据的逻辑**
+  - 选择器是一种函数，它接收 Redux `state` 作为参数，并返回一些数据
+- **Redux 使用叫做“ middleware ”这样的插件模式来开发异步逻辑**
+  - 官方的处理异步 middleware 叫 `redux-thunk`，包含在 Redux Toolkit 中
+  - Thunk 函数接收 `dispatch` 和`getState` 作为参数，并且可以在异步逻辑中使用它们
+- **你可以 dispatch 其他 action 来帮助跟踪 API 调用的加载状态**
+  - 典型的模式是在调用之前 dispatch 一个 "pending" 的 action，然后是包含数据的 “success” 或包含错误的 “failure” action
+  - 加载状态通常应该使用枚举类型，如 `'idle' | 'loading' | 'succeeded' | 'failed'`
+- **Redux Toolkit 有一个 `createAsyncThunk` API 可以为你 dispatch 这些 action**
+  - `createAsyncThunk` 接受一个 “payload creator” 回调函数，它应该返回一个 `Promise`，并自动生成 `pending/fulfilled/rejected` action 类型
+  - 像 `fetchPosts` 这样生成的 action creator 根据你返回的 `Promise` dispatch 这些 action
+  - 可以使用 `extraReducers` 字段在 `createSlice` 中监听这些 action，并根据这些 action 更新 reducer 中的状态。
+  - action creator 可用于自动填充 `extraReducers` 对象的键，以便切片知道要监听的 action。
+  - Thunk 可以返回 promise。 具体对于`createAsyncThunk`，你可以`await dispatch(someThunk()).unwrap()`来处理组件级别的请求成功或失败。
