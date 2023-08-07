@@ -1025,6 +1025,24 @@ function TextInputWithFocusButton() {
 
 https://blog.csdn.net/zhangrui_web/article/details/112979204
 
+https://blog.csdn.net/lixiaonaaa/article/details/126537858
+
+**useCallback不能滥用！**
+
+**实际上，被useCallBack包裹了的函数也会被重新构建并当成useCallBack函数的实参传入。**
+
+**useCallBack的本质工作不是在依赖不变的情况下阻止函数创建，而是在依赖不变的情况下不返回新的函数地址而返回旧的函数地址。不论是否使用useCallBack都无法阻止组件render时函数的重新创建！！**
+
+每一个被useCallBack的函数都将被加入useCallBack内部的管理队列。而当我们大量使用useCallBack的时候，管理队列中的函数会非常之多，任何一个使用了useCallBack的组件重新渲染的时候都需要去便利useCallBack内部所有被管理的函数找到需要校验依赖是否改变的函数并进行校验。
+
+在以上这个过程中，寻找指定函数需要性能，校验也需要性能。**所以，滥用useCallBack不但不能阻止函数重新构建还会增加“寻找指定函数和校验依赖是否改变”这两个功能，为项目增添不必要的负担。**
+
+#### useCallBack在什么情况下使用？
+
+**在往子组件传入了一个函数并且子组件被React.momo缓存了的时候使用**
+
+简单说，React.memo()是通过校验props中的数据是否改变的来决定组件是否需要重新渲染的一种缓存技术，**具体点说React.memo()其实是通过校验Props中的数据的内存地址是否改变来决定组件是否重新渲染组件的一种技术。**
+
 
 
 ## 19. Redux
