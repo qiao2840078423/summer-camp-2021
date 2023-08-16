@@ -350,3 +350,23 @@ new Vue({
 ### 16. 消息订阅与发布
 
 pubsub-js库
+
+### 17.Vue的过度与动画
+
+![image-20230814165648272](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230814165648272.png)
+
+注：使用集成第三方动画，可以提升效率，详情见尚硅谷vue教程p94
+
+### 18. Vue配置代理
+
+尚硅谷教程p97
+
+### 19. 插槽
+
+![image-20230814213151888](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230814213151888.png)
+
+![image-20230814213229459](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230814213229459.png)
+
+![image-20230814213335744](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230814213335744.png)
+
+![image-20230814213357784](D:\files\Github\summer-camp-2021\Joe\notes\images\image-20230814213357784.png)
